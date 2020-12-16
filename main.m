@@ -1,7 +1,6 @@
 %% notes 
 % GOP must include all powers
 % modify figure title for new signal
-% verify that break points meet sampling points
 
 %% Welcome Message
 disp("Welcome to 'The General Signal Generator' project.");
@@ -18,8 +17,8 @@ end
 %% Start & End time
 start_time = input(sprintf("Define start time: \t"));
 end_time = input(sprintf("Define end time: \t"));
-if end_time  <= start_time
-    while end_time <= start_time
+if (end_time - start_time) * sampling_ferq < 2                  % make sure there will be at least 3 samples
+    while (end_time - start_time) * sampling_ferq < 2
         fprintf("\t*** Invalid Input ***\t\n");
         end_time = input(sprintf("Define end time  : \t"));
     end
@@ -43,6 +42,7 @@ for j = 1: bp_number
         while is_not_valid_pbtime(t_bp_time, t_prev, end_time, sampling_ferq, bp_number-j)
             fprintf("\t*** Invalid Input ***\t\n");
             t_bp_time = input(sprintf("Break point #%d time: \t", j));
+            t_bp_time = allign_to_sample_point(t_bp_time, sampling_ferq);
         end
     end
     bp_times(j) = t_bp_time;
@@ -111,16 +111,18 @@ end
 %% Draw and Display
 t = [ ];
 for j = 1 : length(lin_spaces)
-    t = [ t lin_spaces{j} ];
+    t = [ t lin_spaces{j}(1:end-1) ];
 end
-
+ t = [ t lin_spaces{end}(end) ];
+ 
 x = [ ];
 for j = 1 : length(function_points)
-    x = [ x function_points{j} ];
+    x = [ x function_points{j}(1:end-1) ];
 end
+x = [ x function_points{end}(end) ];
 
 figure('NumberTitle', 'off', 'Name', 'Original Signal');
-plot(t, x);
+plot(t, x); hold on; stem(t,x);
 
 %% Signal Operations
 fprintf("\n\t++++ Signal Operations ++++\t\n");
@@ -139,6 +141,7 @@ if t_select < 1 | t_select > 6 | round(t_select) ~= t_select
     end
 end
 
+draw_new = 1;                                                   % a flag to rise if user asks for new modified signal
 switch t_select
     case 1
         t_S = input(sprintf("Scale Value:\t"));
@@ -166,11 +169,14 @@ switch t_select
             end
         end
         t = t / t_C ;
+    case 6
+        draw_new = 0;
 end
 
-figure('NumberTitle', 'off', 'Name', 'Modified Signal');
-stem(t, x);
-
+if draw_new == 1
+    figure('NumberTitle', 'off', 'Name', 'Modified Signal');
+    plot(t, x); hold on; stem(t, x);
+end
 
 
 %% Local Functons
@@ -181,9 +187,8 @@ function y = is_not_valid_bpnum(bpnum, start, end_, sf)
 end
 
 function y = allign_to_sample_point(pbtime, sf)
-    if pbtime * sf == round(pbtime * sf)
-        y = pbtime;
-    else
+     y = pbtime;
+    if pbtime * sf ~= round(pbtime * sf)
         y = ceil(pbtime * sf) / sf;
     end
     fprintf("|| Alligned to sample point at time %d\n", y);
