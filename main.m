@@ -1,6 +1,5 @@
 %% notes 
 % GOP must include all powers
-% modify figure title for new signal
 
 %% Welcome Message
 disp("Welcome to 'The General Signal Generator' project.");
@@ -86,10 +85,20 @@ for j = 1 : length(time_points)-1
             t_B = input(sprintf("Ramp Signal Intercept:\t"));
             function_points{j} = t_M * lin_spaces{j} + t_B;
         case 3
-            t_A = input(sprintf("GOP Signal Amplitude:\t"));
-            t_P= input(sprintf("GOP Signal Power:\t"));
+            t_O = input(sprintf("GOP Signal Order:\t"));
+            if t_O < 1 | t_O ~= round(t_O)
+                while t_O < 1 | t_O ~= round(t_O)
+                    fprintf("\t*** Invalid Input ***\t\n");
+                    t_O = input(sprintf("GOP Signal Order:\t"));
+                end
+            end
+            function_points{j} = zeros(1, length(lin_spaces{j}));
+            for k = t_O:-1:1
+                t_A = input(sprintf("t^%d Amplitude:\t", k));
+                function_points{j} = function_points{j} + t_A * lin_spaces{j} .^ k ;
+            end
             t_B = input(sprintf("GOP Signal Intercept:\t"));
-            function_points{j} = t_A * lin_spaces{j} .^ t_P + t_B;
+            function_points{j} = function_points{j} + t_B;
         case 4
             t_A = input(sprintf("Exponential Signal Amplitude:\t"));
             t_E = input(sprintf("Exponential Signal Exponent:\t"));
