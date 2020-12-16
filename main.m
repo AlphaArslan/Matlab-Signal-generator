@@ -1,6 +1,3 @@
-%% notes 
-% GOP must include all powers
-
 %% Welcome Message
 disp("Welcome to 'The General Signal Generator' project.");
 
@@ -51,8 +48,8 @@ time_points = [ start_time      bp_times     end_time];
 
 %% Signal Definitions
 fprintf("\n\t++++ Signal Definition Rules ++++\t\n");
-lin_spaces = cell(1,length(time_points)-1) ;                                                                                       % to hold t linspace for each definition
-function_points = cell(1,length(time_points)-1) ;                                                                                % to hold x[t] values for each definition
+lin_spaces = cell(1,length(time_points)-1) ;                                                              % to hold t linspace for each definition
+function_points = cell(1,length(time_points)-1) ;                                                       % to hold x[t] values for each definition
 
 for j = 1 : length(time_points)-1
     % create linspace
@@ -206,6 +203,6 @@ end
 function y = is_not_valid_pbtime( pbtime, prev_time, end_, sf, lpn)             % lpn: later points number
     y =  pbtime <= prev_time | pbtime >= end_...          % out of range
          | (pbtime - prev_time) * sf < 3 ...                           % not enough sample before
-         | ( end_ - pbtime) * sf +1 < (lpn + 1) * 3  ...           % not enough samle after
+         | ( end_ - pbtime) * sf +1 < (lpn + 1) * 3  ...           % not enough sample after
             ;
 end
