@@ -3,30 +3,24 @@ disp("Welcome to 'The General Signal Generator' project.");
 
 %% Sampling Frequency
 sampling_ferq = input(sprintf("Define sampling frequency: \t"));
-if sampling_ferq <= 0
-    while sampling_ferq <= 0
-         fprintf("\t*** Invalid Input ***\t\n");
-         sampling_ferq = input(sprintf("Define sampling frequency: \t"));
-    end
+while sampling_ferq <= 0
+     fprintf("\t*** Invalid Input ***\t\n");
+     sampling_ferq = input(sprintf("Define sampling frequency: \t"));
 end
 
 %% Start & End time
 start_time = input(sprintf("Define start time: \t"));
-end_time = input(sprintf("Define end time: \t"));
-if (end_time - start_time) * sampling_ferq < 2                  % make sure there will be at least 3 samples
-    while (end_time - start_time) * sampling_ferq < 2
-        fprintf("\t*** Invalid Input ***\t\n");
-        end_time = input(sprintf("Define end time  : \t"));
-    end
+end_time = input(sprintf("Define end time: \t"));               
+while (end_time - start_time) * sampling_ferq < 2               % make sure there will be at least 3 samples
+    fprintf("\t*** Invalid Input ***\t\n");
+    end_time = input(sprintf("Define end time  : \t"));
 end
 
 %% Break Points
 bp_number = input(sprintf("Break points number: \t"));
-if is_not_valid_bpnum( bp_number, start_time, end_time, sampling_ferq)
-    while is_not_valid_bpnum( bp_number, start_time, end_time, sampling_ferq)
-        fprintf("\t*** Invalid Input ***\t\n");
-        bp_number = input(sprintf("Break points number: \t"));
-    end
+while is_not_valid_bpnum( bp_number, start_time, end_time, sampling_ferq)
+    fprintf("\t*** Invalid Input ***\t\n");
+    bp_number = input(sprintf("Break points number: \t"));
 end
 
 bp_times = start_time * ones(1, bp_number);
@@ -34,12 +28,10 @@ t_prev = start_time;
 for j = 1: bp_number
     t_bp_time = input(sprintf("Break point #%d time: \t", j));
     t_bp_time = allign_to_sample_point(t_bp_time, sampling_ferq);
-    if is_not_valid_pbtime(t_bp_time, t_prev, end_time, sampling_ferq, bp_number-j)
-        while is_not_valid_pbtime(t_bp_time, t_prev, end_time, sampling_ferq, bp_number-j)
-            fprintf("\t*** Invalid Input ***\t\n");
-            t_bp_time = input(sprintf("Break point #%d time: \t", j));
-            t_bp_time = allign_to_sample_point(t_bp_time, sampling_ferq);
-        end
+    while is_not_valid_pbtime(t_bp_time, t_prev, end_time, sampling_ferq, bp_number-j)
+        fprintf("\t*** Invalid Input ***\t\n");
+        t_bp_time = input(sprintf("Break point #%d time: \t", j));
+        t_bp_time = allign_to_sample_point(t_bp_time, sampling_ferq);
     end
     bp_times(j) = t_bp_time;
     t_prev = t_bp_time;
@@ -65,11 +57,9 @@ for j = 1 : length(time_points)-1
     fprintf("4)\t Exponential Signal. \n");
     fprintf("5)\t Sinusoidal Signal. \n");
     t_select = input(sprintf("Choose [1 ~ 5]:\t"));
-    if t_select < 1 | t_select > 5 | round(t_select) ~= t_select
-        while t_select < 1 | t_select > 5 | round(t_select) ~= t_select
-            fprintf("\t*** Invalid Input ***\t\n");
-            t_select = input(sprintf("Choose [1 ~ 5]:\t"));
-        end
+    while t_select < 1 || t_select > 5 || round(t_select) ~= t_select
+        fprintf("\t*** Invalid Input ***\t\n");
+        t_select = input(sprintf("Choose [1 ~ 5]:\t"));
     end
     
     % get definition rule parameters
@@ -83,11 +73,9 @@ for j = 1 : length(time_points)-1
             function_points{j} = t_M * lin_spaces{j} + t_B;
         case 3
             t_O = input(sprintf("GOP Signal Order:\t"));
-            if t_O < 1 | t_O ~= round(t_O)
-                while t_O < 1 | t_O ~= round(t_O)
-                    fprintf("\t*** Invalid Input ***\t\n");
-                    t_O = input(sprintf("GOP Signal Order:\t"));
-                end
+            while t_O < 1 || t_O ~= round(t_O)
+                fprintf("\t*** Invalid Input ***\t\n");
+                t_O = input(sprintf("GOP Signal Order:\t"));
             end
             function_points{j} = zeros(1, length(lin_spaces{j}));
             for k = t_O:-1:1
@@ -103,11 +91,9 @@ for j = 1 : length(time_points)-1
         case 5
             t_A = input(sprintf("Sinusoidal Signal Amplitude:\t"));
             t_F = input(sprintf("Sinusoidal Signal Frequency:\t"));
-            if t_F <=0
-                while t_F <=0
-                    fprintf("\t*** Invalid Input ***\t\n");
-                    t_F = input(sprintf("Sinusoidal Signal Frequency:\t"));
-                end
+            while t_F <=0
+                fprintf("\t*** Invalid Input ***\t\n");
+                t_F = input(sprintf("Sinusoidal Signal Frequency:\t"));
             end
             t_P = input(sprintf("Sinusoidal Signal Phase:\t"));
             function_points{j} = t_A * sin( 2 * pi * t_F * lin_spaces{j} + t_P);
@@ -128,68 +114,65 @@ end
 x = [ x function_points{end}(end) ];
 
 figure('NumberTitle', 'off', 'Name', 'Original Signal');
-plot(t, x); hold on; stem(t,x);
+subplot(2,1, 1); plot(t, x); ylabel("x[t]"); xlabel("t");
+subplot(2,1, 2); stem(t,x); ylabel("x[n]"); xlabel("n");
 
 %% Signal Operations
-fprintf("\n\t++++ Signal Operations ++++\t\n");
-fprintf("\nChoose a  signal operation to be performed: \n");
-fprintf("1)\t Amplitude Scaling. \n");
-fprintf("2)\t Time Reversal. \n");
-fprintf("3)\t Time shift. \n");
-fprintf("4)\t Expanding the signal. \n");
-fprintf("5)\t Compressing the signal. \n");
-fprintf("6)\t None. \n");
-t_select = input(sprintf("Choose [1 ~ 6]:\t"));
-if t_select < 1 | t_select > 6 | round(t_select) ~= t_select
-    while t_select < 1 | t_select > 6 | round(t_select) ~= t_select
+draw_new = 1;                                                   % a flag to rise if user asks for new modified signal
+while draw_new ~= 0
+    fprintf("\n\t++++ Signal Operations ++++\t\n");
+    fprintf("\nChoose a  signal operation to be performed: \n");
+    fprintf("1)\t Amplitude Scaling. \n");
+    fprintf("2)\t Time Reversal. \n");
+    fprintf("3)\t Time shift. \n");
+    fprintf("4)\t Expanding the signal. \n");
+    fprintf("5)\t Compressing the signal. \n");
+    fprintf("6)\t None. \n");
+    t_select = input(sprintf("Choose [1 ~ 6]:\t"));
+    while t_select < 1 || t_select > 6 || round(t_select) ~= t_select
         fprintf("\t*** Invalid Input ***\t\n");
         t_select = input(sprintf("Choose [1 ~ 6]:\t"));
     end
-end
 
-draw_new = 1;                                                   % a flag to rise if user asks for new modified signal
-switch t_select
-    case 1
-        t_S = input(sprintf("Scale Value:\t"));
-        x = t_S * x;
-    case 2
-        t = -t;
-    case 3
-        t_SH = input(sprintf("Shift Value 'X[ t - T ]':\t"));
-        t = t + t_SH ;
-    case 4
-        t_E = input(sprintf("Expanding Value ']0 , 1[' :\t"));
-        if t_E <=0 | t_E >=1
-            while t_E <=0 | t_E >=1
+    switch t_select
+        case 1
+            t_S = input(sprintf("Scale Value:\t"));
+            x = t_S * x;
+        case 2
+            t = -t;
+        case 3
+            t_SH = input(sprintf("Shift Value 'X[ t - T ]':\t"));
+            t = t + t_SH ;
+        case 4
+            t_E = input(sprintf("Expanding Value ']0 , 1[' :\t"));
+            while t_E <=0 || t_E >=1
                 fprintf("\t*** Invalid Input ***\t\n");
                 t_E = input(sprintf("Expanding Value ']0 , 1[' :\t"));
             end
-        end
-        t = t / t_E ;
-    case 5
-        t_C = input(sprintf("Compressing Value ']1 , inf[' :\t"));
-        if t_C <=0 | t_C >=1
+            t = t / t_E ;
+        case 5
+            t_C = input(sprintf("Compressing Value ']1 , inf[' :\t"));
             while t_C <=1
                 fprintf("\t*** Invalid Input ***\t\n");
                 t_C = input(sprintf("Compressing Value ']1 , inf[' :\t"));
             end
-        end
-        t = t / t_C ;
-    case 6
-        draw_new = 0;
-end
+            t = t / t_C ;
+        case 6
+            draw_new = 0;
+    end
 
-if draw_new == 1
-    figure('NumberTitle', 'off', 'Name', 'Modified Signal');
-    plot(t, x); hold on; stem(t, x);
+    if draw_new == 1
+        figure('NumberTitle', 'off', 'Name', 'Modified Signal');
+        subplot(2,1, 1); plot(t, x); ylabel("x[t]"); xlabel("t");
+        subplot(2,1, 2); stem(t,x); ylabel("x[n]"); xlabel("n");
+    end
 end
-
 
 %% Local Functons
 function y = is_not_valid_bpnum(bpnum, start, end_, sf)
     y =  bpnum < 0 ...                                                        % negative
-          | round(bpnum) ~= bpnum...                                % non integer
-          | bpnum > (1/3 * (sf * (end_ - start) +1) -1);        % exceeds max value 
+          || round(bpnum) ~= bpnum...                                % non integer
+          || bpnum > (1/3 * (sf * (end_ - start) +1) -1);        % exceeds max value 
 end
 
 function y = allign_to_sample_point(pbtime, sf)
@@ -201,8 +184,8 @@ function y = allign_to_sample_point(pbtime, sf)
 end
 
 function y = is_not_valid_pbtime( pbtime, prev_time, end_, sf, lpn)             % lpn: later points number
-    y =  pbtime <= prev_time | pbtime >= end_...          % out of range
-         | (pbtime - prev_time) * sf < 3 ...                           % not enough sample before
-         | ( end_ - pbtime) * sf +1 < (lpn + 1) * 3  ...           % not enough sample after
+    y =  pbtime <= prev_time || pbtime >= end_...          % out of range
+         || (pbtime - prev_time) * sf < 3 ...                          % not enough sample before
+         || ( end_ - pbtime) * sf +1 < (lpn + 1) * 3  ...          % not enough sample after
             ;
 end
