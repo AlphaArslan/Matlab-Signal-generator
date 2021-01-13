@@ -85,8 +85,8 @@ Also, refer to the (report)[https://github.com/AlphaArslan/Matlab-Signal-generat
 ### Contributions
 This project wouldn't come to existence if it wasn't for the great contribution of my teammates.
 The code was tested by my teammates:
-- @fizards12
-- @princesiefshama
+- [@fizards12](https://github.com/fizards12)
+- [@princesiefshama](https://github.com/princesiefshama)
 
 The report was done by:
-- @Mohamedtarek1998
+- [@Mohamedtarek1998](https://github.com/Mohamedtarek1998)
