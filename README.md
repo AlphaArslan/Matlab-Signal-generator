@@ -80,7 +80,8 @@ A [YouTube Playlist](https://www.youtube.com/watch?v=iZtJm0G5PE4&list=PLVTXC7QFR
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/iZtJm0G5PE4/0.jpg)](https://www.youtube.com/watch?v=iZtJm0G5PE4)
 
 <br>
-Also, refer to the (report)[https://github.com/AlphaArslan/Matlab-Signal-generator/blob/master/report/report.pdf] to find a demo on how to produce the signal in the image above and how to do variant operations on it.
+
+Also, refer to the [report](https://github.com/AlphaArslan/Matlab-Signal-generator/blob/master/report/report.pdf) to find a demo on how to produce the signal in the image above and how to do variant operations on it.
 
 ### Contributions
 This project wouldn't come to existence if it wasn't for the great contribution of my teammates.
