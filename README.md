@@ -18,6 +18,7 @@ We enable the user to define a signal to plot, and an operation to perform on th
     - [Time Scaling](#Time-Scaling):
         - [Time Expansion](#Time-Expansion).
         - [Time Compression](#Time-Compression).
+ - [Demo and Tutorial](#Demo-and-Tutorial)
 
 - - - - -
 ## Supported Function Definitions
@@ -28,7 +29,7 @@ Each function definition may require a certain number of parameters depending on
 __x[t] = A__<br>
 As __A__ is constant. Apparently, this function definition takes only one parameter: __A__.
 
-##3 Ramp Signal
+### Ramp Signal
 __x[t] = A * t + B__<br>
 Here we have two parameters: __A__ and __B__.
 
@@ -71,3 +72,21 @@ This is a sub-operation of time scaling, where __0 < A < 1__.
 This is a sub-operation of time scaling, where __1 < A__.
 
 >NOTE: no actual need to use sub-operations for time scaling as all variations can be achieved through the value of __A__. However, again, we choose to follow the problem statement to the letter. We don't need to get anyone in the teaching staff offended :wink: :wink:.
+
+## Demo and Tutorial
+A [YouTube Playlist](https://www.youtube.com/watch?v=iZtJm0G5PE4&list=PLVTXC7QFRDzqUeJxwqGO58LoilPx6BsM0) has been done. It gives full explanation even to the finest details. The Tutorial is in __Arabic__ but subtitles are expected.<br>
+<br>
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/iZtJm0G5PE4/0.jpg)](https://www.youtube.com/watch?v=iZtJm0G5PE4)
+
+<br>
+Also, refer to the (report)[https://github.com/AlphaArslan/Matlab-Signal-generator/blob/master/report/report.pdf] to find a demo on how to produce the signal in the image above and how to do variant operations on it.
+
+### Contributions
+This project wouldn't come to existence if it wasn't for the great contribution of my teammates.
+The code was tested by my teammates:
+- @fizards12
+- @princesiefshama
+
+The report was done by:
+- @Mohamedtarek1998
